@@ -29,7 +29,7 @@ python main.py
 ### Build image
 
 ```shell
-docker build --tag <pawanj09/stocks-crypto-data:v1.0.0> .
+docker build --tag pawanj09/stocks-crypto-data:v1.0.0 .
 ```
 
 ### Run the container from built image
@@ -37,20 +37,20 @@ docker build --tag <pawanj09/stocks-crypto-data:v1.0.0> .
 Here we use -it for interactive terminal since we have to input the city from user.
 
 ```shell
-docker run --name <stocks-crypto-data> -p 1001:1001 -it <pawanj09/stocks-crypto-data:v1.0.0>
+docker run --name stocks-crypto-data -p 1001:1001 -it pawanj09/stocks-crypto-data:v1.0.0
 ```
 
 ### Start the container if re-executing the image
 
 ```shell
-docker start <stocks-crypto-data> -i
+docker start stocks-crypto-data -i
 ```
 
 ### Run using image from Docker hub
 
 ```shell
-docker pull docker pull <pawanj09/stocks-crypto-data>
+docker pull pawanj09/stocks-crypto-data
 
-docker run --name <stocks-crypto-data> -p 1001:1001 -it <pawanj09/stocks-crypto-data>
+docker run --name stocks-crypto-data -p 1001:1001 -it pawanj09/stocks-crypto-data
 ```
 
