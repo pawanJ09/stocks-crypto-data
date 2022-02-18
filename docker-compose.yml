@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  stocksdb:
+    image: postgres:latest
+    container_name: 'stocks-db'
+    environment:
+      - POSTGRES_USER=stocksuser
+      - POSTGRES_PASSWORD=stockspass
+    ports:
+      - '5432:5432'
+    volumes:
+      #- stocksvol:/var/lib/postgresql/data
+      - ./sql/01_db_create.sql:/docker-entrypoint-initdb.d/01_db_create.sql
+      - ./sql/02_tables_create.sql:/docker-entrypoint-initdb.d/02_tables_create.sql
+    networks:
+      - stocks-net
+
+volumes:
+  stocksvol:
+    name: 'stocks-volume'
+    driver: local
+
+networks:
+  stocks-net:
+    driver: bridge
+    name: stocks-network

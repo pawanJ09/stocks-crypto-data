@@ -1,4 +1,4 @@
-class Entity:
+class Stock:
 
     def __init__(self, *args):
         self.date = args[0][0]

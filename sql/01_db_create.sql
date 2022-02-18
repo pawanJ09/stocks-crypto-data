@@ -1,0 +1,1 @@
+CREATE DATABASE stocksdb OWNER stocksuser;

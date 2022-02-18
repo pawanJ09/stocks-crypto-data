@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from Entity import Entity
+from stock import Stock
 import requests
 import globals
 import time
@@ -87,7 +87,7 @@ def generate_entity_object(content):
     :param content: str row from response
     :return: com.Entity.Entity object
     """
-    return Entity(content.split(","))
+    return Stock(content.split(","))
 
 
 
