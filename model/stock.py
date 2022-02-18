@@ -4,7 +4,7 @@ from database import Base
 
 class StockModel(Base):
 
-    __tablename__ = "stocks"
+    __tablename__ = "stock"
     id = Column(Integer, primary_key=True)
     stock_id = Column(Integer)
     stock_date = Column(Date)

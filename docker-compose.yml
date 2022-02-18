@@ -7,7 +7,7 @@ services:
     container_name: stocks-crypto-data
     ports:
       - '5001:5001'
-    restart: on-failure:5
+    restart: on-failure:3
     depends_on:
       - stocksdb
     networks:
