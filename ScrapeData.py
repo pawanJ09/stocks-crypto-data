@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from stock import Stock
+from model.stock import Stock
 import requests
 import globals
 import time
