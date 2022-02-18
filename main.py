@@ -11,7 +11,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 api = Api(app)
 api.add_resource(StocksNameResource, '/stocks_code/<string:name>')
 api.add_resource(StocksListResource, '/stocks_codes')
-api.add_resource(StockResource, '/stocks/refresh')
 
 
 if __name__ == '__main__':

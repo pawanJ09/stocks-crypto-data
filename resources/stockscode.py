@@ -12,14 +12,14 @@ class StocksNameResource(Resource):
                         )
 
     def get(self, name):
-        stock = db_session.query(StocksCodeModel).filter(StocksCodeModel.name == name).first()
+        stock = StocksCodeModel.find_by_name(name)
         if stock is not None:
             return stock.json()
         return {"message": "Not found"}, 404
 
     def post(self, name):
         data = StocksNameResource.parser.parse_args()
-        stock = db_session.query(StocksCodeModel).filter(StocksCodeModel.name == name).first()
+        stock = StocksCodeModel.find_by_name(name)
         if stock is None:
             stock = StocksCodeModel(name, data['code'])
             db_session.add(stock)
@@ -30,7 +30,7 @@ class StocksNameResource(Resource):
 
     def put(self, name):
         data = StocksNameResource.parser.parse_args()
-        stock = db_session.query(StocksCodeModel).filter(StocksCodeModel.name == name).first()
+        stock = StocksCodeModel.find_by_name(name)
         if stock is None:
             stock = StocksCodeModel(name, data['code'])
         else:
@@ -40,7 +40,7 @@ class StocksNameResource(Resource):
         return self.get(name)
 
     def delete(self, name):
-        stock = db_session.query(StocksCodeModel).filter(StocksCodeModel.name == name).first()
+        stock = StocksCodeModel.find_by_name(name)
         if stock is not None:
             db_session.delete(stock)
             db_session.commit()

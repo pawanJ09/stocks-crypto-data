@@ -1,8 +1,8 @@
-from flask_restful import request, Resource
-from model.stock import StockModel
+from flask import request
+from database import db_session
 
 
-class StockResource(Resource):
+class StockResource:
 
     def get(self, name):
         pass

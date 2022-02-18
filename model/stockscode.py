@@ -1,5 +1,6 @@
 from database import Base
 from sqlalchemy import Column, Integer, String
+from database import db_session
 
 
 class StocksCodeModel(Base):
@@ -18,4 +19,8 @@ class StocksCodeModel(Base):
 
     def __repr__(self):
         return f"StocksCodeModel(id={self.id!r}, name={self.name!r}, code={self.code!r})"
+
+    @classmethod
+    def find_by_name(cls, name):
+        return db_session.query(StocksCodeModel).filter(StocksCodeModel.name == name).first()
 
