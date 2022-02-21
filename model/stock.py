@@ -35,10 +35,10 @@ class StockModel(Base):
     def json(self):
         return {"id": self.id, "stock_id": self.stock_id,
                 "stock_date": self.stock_date.strftime('%Y-%m-%d'),
-                "open_val": float(self.open_val), "high_val": self.high_val,
-                "low_val": self.low_val,
-                "close_val": self.close_val, "adj_close_val": self.adj_close_val,
-                "volume": self.volume}
+                "open_val": float(self.open_val), "high_val": float(self.high_val),
+                "low_val": float(self.low_val),
+                "close_val": float(self.close_val), "adj_close_val": float(self.adj_close_val),
+                "volume": float(self.volume)}
 
     def __repr__(self):
         return f"StockModel(id={self.id!r}, stock_id={self.stock_id!r}, " \
