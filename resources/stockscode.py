@@ -22,8 +22,7 @@ class StocksNameResource(Resource):
         stock = StocksCodeModel.find_by_name(name)
         if stock is None:
             stock = StocksCodeModel(name, data['code'])
-            db_session.add(stock)
-            db_session.commit()
+            stock.save_to_db()
             return self.get(name)
         else:
             return {"message": f"{name} already exists"}, 400
@@ -35,15 +34,13 @@ class StocksNameResource(Resource):
             stock = StocksCodeModel(name, data['code'])
         else:
             stock.code = data['code']
-        db_session.add(stock)
-        db_session.commit()
+        stock.save_to_db()
         return self.get(name)
 
     def delete(self, name):
         stock = StocksCodeModel.find_by_name(name)
         if stock is not None:
-            db_session.delete(stock)
-            db_session.commit()
+            stock.delete_from_db()
             return {"message": f"{name} deleted"}, 200
         return {"message": "Not found"}, 404
 

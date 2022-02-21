@@ -22,5 +22,13 @@ class StocksCodeModel(Base):
 
     @classmethod
     def find_by_name(cls, name):
-        return db_session.query(StocksCodeModel).filter(StocksCodeModel.name == name).first()
+        return cls.query.filter(StocksCodeModel.name == name).first()
+
+    def save_to_db(self):
+        db_session.add(self)
+        db_session.commit()
+
+    def delete_from_db(self):
+        db_session.delete(self)
+        db_session.commit()
 
