@@ -25,6 +25,8 @@ services:
       - stocksvol:/var/lib/postgresql/data
       - ./sql/01_db_create.sql:/docker-entrypoint-initdb.d/01_db_create.sql
       - ./sql/02_tables_create.sql:/docker-entrypoint-initdb.d/02_tables_create.sql
+      - ./sql/03_tables_seeding.sql:/docker-entrypoint-initdb.d/03_tables_seeding.sql
+
     networks:
       - stocks-net
 
