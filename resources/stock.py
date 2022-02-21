@@ -1,11 +1,13 @@
-from flask import request
+from flask import request, jsonify
 from database import db_session
+from app import app
 
 
-class StockResource:
+@app.route('/stocks/<string:name>', methods=['GET'])
+def fetch_stock(name):
+    return {"message": f"Fetching stocks for {name}"}
 
-    def get(self, name):
-        pass
 
-    def post(self, name):
-        pass
+@app.route('/stocks/refresh/<string:name>', methods=['POST'])
+def refresh_stock(name):
+    return jsonify({"message": f"Fetching stocks for {name}"})

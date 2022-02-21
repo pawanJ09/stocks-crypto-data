@@ -1,16 +1,5 @@
-from flask import Flask
-from flask_restful import Api
+from app import app
 from database import init_db
-from resources.stockscode import StocksNameResource, StocksListResource
-from resources.stock import StockResource
-
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-
-api = Api(app)
-api.add_resource(StocksNameResource, '/stocks_code/<string:name>')
-api.add_resource(StocksListResource, '/stocks_codes')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
-from model.stockscode import StocksCodeModel
-from flask_restful import Resource, reqparse
+from flask_restful import Api, Resource, reqparse
 from database import db_session
+from model.stockscode import StocksCodeModel
 
 
 class StocksNameResource(Resource):
@@ -52,4 +52,5 @@ class StocksListResource(Resource):
 
     def get(self):
         return {"stocks": list(map(lambda x: x.json(), db_session.query(StocksCodeModel).all()))}
+
 
