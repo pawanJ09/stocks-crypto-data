@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Date, Numeric, delete
+from sqlalchemy import Column, Integer, Date, Numeric, delete, select
 from sqlalchemy.exc import DataError, SQLAlchemyError, DBAPIError
 from database import Base, db_session
 from model.stockscode import StocksCodeModel
@@ -50,12 +50,26 @@ class StockModel(Base):
     def fetch_listings_by_name(cls, name):
         stock_code = StocksCodeModel.find_by_name(name)
         if stock_code is not None:
+            # This is ORM 1.x style
             return cls.query.filter(StockModel.stock_id == stock_code.id)\
                 .order_by(StockModel.stock_date)
 
+    @classmethod
+    def fetch_listings_by_name_and_date(cls, name, *args):
+        stock_code = StocksCodeModel.find_by_name(name)
+        # This is ORM 2.0 style
+        if stock_code is not None:
+            if len(args) == 1:
+                stmt = select(cls).where(cls.stock_id == stock_code.id,
+                                         cls.stock_date >= args[0]).order_by(cls.stock_date)
+            else:
+                stmt = select(cls).where(cls.stock_id == stock_code.id, cls.stock_date >= args[0],
+                                         cls.stock_date < args[1]).order_by(cls.stock_date)
+            return [row for row in db_session.execute(stmt)]
+
     def save_to_db(self):
         try:
-            db_session.add(self)
+            db_session.add(self)  # This is ORM 1.x style
             db_session.commit()
         except (SQLAlchemyError, DBAPIError) as error:
             db_session.rollback()
@@ -65,7 +79,7 @@ class StockModel(Base):
     @classmethod
     def delete_from_db(cls, stock_code):
         if stock_code is not None:
-            stmt = delete(cls).where(cls.stock_id == stock_code.id)
+            stmt = delete(cls).where(cls.stock_id == stock_code.id)  # This is ORM 2.0 style
             db_session.execute(stmt)
             db_session.commit()
 

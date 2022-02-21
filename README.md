@@ -37,3 +37,39 @@ docker-compose build
 docker-compose up
 ```
 
+## Usage
+
+### Stocks Code base model CRUD operations
+
+- GET http://127.0.0.1:5001/stocks_codes: Get all stock names and codes in system.
+- GET http://127.0.0.1:5001/stocks_code/<name>: Get stock code by name.
+- POST http://127.0.0.1:5001/stocks_code/<name>: Create new stock code in system.
+
+```json
+{
+    "code": "FB-USD"
+}
+```
+
+- PUT http://127.0.0.1:5001/stocks_code/<name>: Update existing stock code with the provided 
+  name if it exists else create new.
+
+```json
+{
+    "code": "FB"
+}
+```
+
+- DELETE http://127.0.0.1:5001/stocks_code/<name>: Delete stock code and name from system.
+
+### Stocks listings operations:
+
+- GET http://127.0.0.1:5001/stocks/<name>: Get all listings of the requested stock from the system.
+- GET http://127.0.0.1:5001/stocks/<name>?date_from=<yyyy-mm-dd>: Get all listings of the 
+  requested stock from the date provided in the system.
+- GET http://127.0.0.1:5001/stocks/<name>?date_from=<yyyy-mm-dd>&date_to=<yyyy-mm-dd>: Get all 
+  listings of the requested stock from the date range in the system.
+- POST http://127.0.0.1:5001/stocks/refresh/<name>: Fetch from web scraping and update listings of 
+  the provided stock in the system.
+- DELETE http://127.0.0.1:5001/stocks/<name>: Delete all listings of the provided stock from the 
+  system.
