@@ -17,7 +17,8 @@ CREATE TABLE public.stock (
     low_val NUMERIC(10) NOT NULL,
     close_val NUMERIC(10) NOT NULL,
     adj_close_val NUMERIC(10) NOT NULL,
-    volume NUMERIC(20) NOT NULL
+    volume NUMERIC(20) NOT NULL,
+    UNIQUE(stock_id, stock_date)
 );
 
 END TRANSACTION;
