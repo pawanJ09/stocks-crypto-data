@@ -1,4 +1,4 @@
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Resource, reqparse
 from database import db_session
 from model.stockscode import StocksCodeModel
 

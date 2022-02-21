@@ -1,6 +1,5 @@
-from database import Base
+from database import Base, db_session
 from sqlalchemy import Column, Integer, String
-from database import db_session
 
 
 class StocksCodeModel(Base):
