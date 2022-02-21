@@ -1,24 +1,36 @@
 from bs4 import BeautifulSoup
 from model.stock import StockModel
 from sqlalchemy.exc import DataError
-import requests
 from globals import url, headers
+from datetime import datetime
+import requests
 import time
 import csv
 
 
 def scrape_and_save(stock_code):
-    period_start, period_end = date_criteria()
+    period_start, period_end = date_criteria(stock_code)
     response = scrape_data(stock_code, period_start, period_end)
     generate_data(stock_code, response)
 
 
-def date_criteria():
+def date_criteria(stock_code):
     """
     This method generates the start and end criteria in seconds that will be appended to the url
+    :param stock_code: model.stockscode.StocksCodeModel object
     :return: (period_start, period_end)
     """
-    period_start = round((time.time()) - (5 * 365.25) * 24 * 60 * 60)
+    max_date = StockModel.fetch_listing_max_date(stock_code)
+    if max_date is not None:
+        if datetime.now().date() == max_date:
+            # if both are equal then no need to fetch latest data
+            return 0, 0
+        else:
+            # Add 1 day to max_date to start fetching from next date
+            period_start = round(datetime(max_date.year, max_date.month, max_date.day).timestamp()
+                                 + (24*60*60))
+    else:
+        period_start = round((time.time()) - (5 * 365.25) * 24 * 60 * 60)
     period_end = round(time.time())
     return period_start, period_end
 
@@ -32,6 +44,7 @@ def scrape_data(stock_code, period_start, period_end):
     :return: requests.models.Response object
     """
     local_url = url.format(stock_code.code, period_start, period_end)
+    print(f'url {local_url}')
     print(f'Fetching data for {stock_code.name}')
     response = requests.get(url=local_url, headers=headers)
     return response
@@ -45,15 +58,17 @@ def generate_data(stock_code, response):
     :param response: requests.models.Response object
     :return:
     """
-    soup = BeautifulSoup(response.text, "html.parser")
-    content_list = str(soup).split("\n")
-    stock_listings = [generate_stockmodel_object(stock_code.id, c) for i, c in enumerate(
-        content_list) if i > 0]
-    try:
-        for listing in stock_listings:
-            listing.save_to_db()
-    except DataError as error:
-        write_to_file(stock_code.code, stock_listings)
+    if response.status_code == 200:
+        print(f'Parsing response for {stock_code.name}')
+        soup = BeautifulSoup(response.text, "html.parser")
+        content_list = str(soup).split("\n")
+        stock_listings = [generate_stockmodel_object(stock_code.id, c) for i, c in enumerate(
+            content_list) if i > 0]
+        try:
+            for listing in stock_listings:
+                listing.save_to_db()
+        except DataError as error:
+            write_to_file(stock_code.code, stock_listings)
 
 
 def generate_stockmodel_object(stock_code_id, content):

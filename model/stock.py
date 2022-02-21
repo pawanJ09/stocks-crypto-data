@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, Date, Numeric, delete, select
 from sqlalchemy.exc import DataError, SQLAlchemyError, DBAPIError
+from sqlalchemy.sql.functions import max
 from database import Base, db_session
 from model.stockscode import StocksCodeModel
 from datetime import datetime
@@ -64,8 +65,21 @@ class StockModel(Base):
                                          cls.stock_date >= args[0]).order_by(cls.stock_date)
             else:
                 stmt = select(cls).where(cls.stock_id == stock_code.id, cls.stock_date >= args[0],
-                                         cls.stock_date < args[1]).order_by(cls.stock_date)
+                                         cls.stock_date <= args[1]).order_by(cls.stock_date)
             return [row for row in db_session.execute(stmt)]
+
+    @classmethod
+    def fetch_listing_max_date(cls, stock_code):
+        """
+        This method fetches the listing max date for the requested stock
+        :param stock_code: models.stockscode.StocksCodeModel object
+        :return row: max date
+        """
+        if stock_code is not None:
+            stmt = select(max(cls.stock_date)).where(cls.stock_id == stock_code.id)
+            print(type(stmt), stmt)
+            for row in db_session.execute(stmt):
+                return row[0]
 
     def save_to_db(self):
         try:
