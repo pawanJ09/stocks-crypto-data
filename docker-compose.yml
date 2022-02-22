@@ -5,6 +5,10 @@ services:
     image: stocks-crypto-data:latest
     build: .
     container_name: stocks-crypto-data
+    environment:
+      - STOCKS_USER=stocksuser
+      - STOCKS_PASSWORD=stockspass
+      - STOCKS_DB_HOST=stocksdb
     ports:
       - '5001:5001'
     restart: on-failure:3
