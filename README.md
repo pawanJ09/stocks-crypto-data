@@ -73,3 +73,8 @@ docker-compose up
   the provided stock in the system.
 - DELETE http://127.0.0.1:5001/stocks/<name>: Delete all listings of the provided stock from the 
   system.
+
+### Connecting to AWS
+
+Use host and port as ec2-3-16-54-51.us-east-2.compute.amazonaws.com:5001 for the above endpoints 
+to access these services directly on AWS Cloud.
