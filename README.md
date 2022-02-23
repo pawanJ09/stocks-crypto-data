@@ -1,3 +1,5 @@
+<meta name="google-site-verification" content="h8-Bfstpt11Qx1tYnzjOlUrz7z4u1CjM6qJOGmAc9u0" />
+
 # Stocks and Crypto Data Analyzer
 
 This app fetches the historical data of 5 years for the requested Stock or Crypto options. This 
