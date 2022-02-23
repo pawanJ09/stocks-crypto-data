@@ -43,9 +43,9 @@ docker-compose up
 
 ### Stocks Code base model CRUD operations
 
-- GET http://127.0.0.1:5001/stocks_codes: Get all stock names and codes in system.
-- GET http://127.0.0.1:5001/stocks_code/<name>: Get stock code by name.
-- POST http://127.0.0.1:5001/stocks_code/<name>: Create new stock code in system.
+- GET http://127.0.0.1:5001/stocks_codes : Get all stock names and codes in system.
+- GET http://127.0.0.1:5001/stocks_code/:stock_name : Get stock code by name.
+- POST http://127.0.0.1:5001/stocks_code/:stock_name : Create new stock code in system.
 
 ```json
 {
@@ -53,7 +53,7 @@ docker-compose up
 }
 ```
 
-- PUT http://127.0.0.1:5001/stocks_code/<name>: Update existing stock code with the provided 
+- PUT http://127.0.0.1:5001/stocks_code/:stock_name : Update existing stock code with the provided 
   name if it exists else create new.
 
 ```json
@@ -62,19 +62,20 @@ docker-compose up
 }
 ```
 
-- DELETE http://127.0.0.1:5001/stocks_code/<name>: Delete stock code and name from system.
+- DELETE http://127.0.0.1:5001/stocks_code/:stock_name : Delete stock code and name from system.
 
 ### Stocks listings operations:
 
-- GET http://127.0.0.1:5001/stocks/<name>: Get all listings of the requested stock from the system.
-- GET http://127.0.0.1:5001/stocks/<name>?date_from=<yyyy-mm-dd>: Get all listings of the 
-  requested stock from the date provided in the system.
-- GET http://127.0.0.1:5001/stocks/<name>?date_from=<yyyy-mm-dd>&date_to=<yyyy-mm-dd>: Get all 
-  listings of the requested stock from the date range in the system.
-- POST http://127.0.0.1:5001/stocks/refresh/<name>: Fetch from web scraping and update listings of 
-  the provided stock in the system.
-- DELETE http://127.0.0.1:5001/stocks/<name>: Delete all listings of the provided stock from the 
+- GET http://127.0.0.1:5001/stocks/:stock_name : Get all listings of the requested stock from the 
   system.
+- GET http://127.0.0.1:5001/stocks/:stock_name?date_from=<yyyy-mm-dd> : Get all listings of the 
+  requested stock from the date provided in the system.
+- GET http://127.0.0.1:5001/stocks/:stock_name?date_from=<yyyy-mm-dd>&date_to=<yyyy-mm-dd> : Get 
+  all listings of the requested stock from the date range in the system.
+- POST http://127.0.0.1:5001/stocks/refresh/:stock_name : Fetch from web scraping and update 
+  listings of the provided stock in the system.
+- DELETE http://127.0.0.1:5001/stocks/:stock_name : Delete all listings of the provided stock 
+  from the system.
 
 ### Connecting to AWS
 
