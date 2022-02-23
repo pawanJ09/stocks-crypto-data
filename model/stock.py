@@ -12,11 +12,11 @@ class StockModel(Base):
     id = Column(Integer, primary_key=True)
     stock_id = Column(Integer)
     stock_date = Column(Date)
-    open_val = Column(Numeric(precision=10))
-    high_val = Column(Numeric(precision=10))
-    low_val = Column(Numeric(precision=10))
-    close_val = Column(Numeric(precision=10))
-    adj_close_val = Column(Numeric(precision=10))
+    open_val = Column(Numeric(precision=20, scale=6))
+    high_val = Column(Numeric(precision=20, scale=6))
+    low_val = Column(Numeric(precision=20, scale=6))
+    close_val = Column(Numeric(precision=20, scale=6))
+    adj_close_val = Column(Numeric(precision=20, scale=6))
     volume = Column(Numeric(precision=20))
 
     def __init__(self, stock_code_id, *args):
@@ -27,7 +27,7 @@ class StockModel(Base):
         self.low_val = float(args[0][3])
         self.close_val = float(args[0][4])
         self.adj_close_val = float(args[0][5])
-        self.volume = float(args[0][6])
+        self.volume = int(args[0][6])
 
     def __str__(self):
         return f'{self.stock_id},{self.stock_date},{self.open_val},{self.high_val},' \
@@ -39,7 +39,7 @@ class StockModel(Base):
                 "open_val": float(self.open_val), "high_val": float(self.high_val),
                 "low_val": float(self.low_val),
                 "close_val": float(self.close_val), "adj_close_val": float(self.adj_close_val),
-                "volume": float(self.volume)}
+                "volume": int(self.volume)}
 
     def __repr__(self):
         return f"StockModel(id={self.id!r}, stock_id={self.stock_id!r}, " \
