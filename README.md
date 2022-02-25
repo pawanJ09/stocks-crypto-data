@@ -2,10 +2,10 @@
 
 # Stocks and Crypto Data Analyzer
 
-This app fetches the historical data of 5 years for the requested Stock or Crypto options. This 
-program has dependency on requests module which invokes the Yahoo Finance query engine and 
-fetches all the requested data. The exposed APIs are created using Flask-RESTful and 
-Flask-SQLAlchemy.
+This app fetches the current and historical data of 5 years for the requested Stock or Crypto. 
+The program has dependency on requests and BeautifulSoup module which invokes the Yahoo 
+Finance query engine, scrapes requested data and stores it in PostgreSQL. The APIs are created 
+and exposed using Flask, Flask-RESTful, Flask-SQLAlchemy and Marshmallow.
 
 ## Requirements
 
@@ -66,12 +66,15 @@ docker-compose up
 
 ### Stocks listings operations:
 
-- GET http://127.0.0.1:5001/stocks/:stock_name : Get all listings of the requested stock from the 
-  system.
-- GET http://127.0.0.1:5001/stocks/:stock_name?date_from=<yyyy-mm-dd> : Get all listings of the 
-  requested stock from the date provided in the system.
-- GET http://127.0.0.1:5001/stocks/:stock_name?date_from=<yyyy-mm-dd>&date_to=<yyyy-mm-dd> : Get 
-  all listings of the requested stock from the date range in the system.
+- GET http://127.0.0.1:5001/stocks/:stock_name : Get current listings of the requested stock 
+  from source.
+- GET http://127.0.0.1:5001/stocks/historical/:stock_name : Get all listings of the requested 
+  stock from the system.
+- GET http://127.0.0.1:5001/stocks/historical/:stock_name?date_from=<yyyy-mm-dd> : Get all 
+  listings of the requested stock from the date provided in the system.
+- GET http://127.0.0.1:5001/stocks/historical/:stock_name?
+  date_from=<yyyy-mm-dd>&date_to=<yyyy-mm-dd> : Get all listings of the requested stock from the 
+  date range in the system.
 - POST http://127.0.0.1:5001/stocks/refresh/:stock_name : Fetch from web scraping and update 
   listings of the provided stock in the system.
 - DELETE http://127.0.0.1:5001/stocks/:stock_name : Delete all listings of the provided stock 
