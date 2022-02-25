@@ -70,10 +70,9 @@ docker-compose up
   from source.
 - GET http://127.0.0.1:5001/stocks/historical/:stock_name : Get all listings of the requested 
   stock from the system.
-- GET http://127.0.0.1:5001/stocks/historical/:stock_name?date_from=<yyyy-mm-dd> : Get all 
+- GET http://127.0.0.1:5001/stocks/historical/:stock_name?date_from=:yyyy-mm-dd : Get all 
   listings of the requested stock from the date provided in the system.
-- GET http://127.0.0.1:5001/stocks/historical/:stock_name?
-  date_from=<yyyy-mm-dd>&date_to=<yyyy-mm-dd> : Get all listings of the requested stock from the 
+- GET http://127.0.0.1:5001/stocks/historical/:stock_name?date_from=:yyyy-mm-dd&date_to=:yyyy-mm-dd : Get all listings of the requested stock from the 
   date range in the system.
 - POST http://127.0.0.1:5001/stocks/refresh/:stock_name : Fetch from web scraping and update 
   listings of the provided stock in the system.
