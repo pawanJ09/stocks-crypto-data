@@ -135,5 +135,6 @@ def parse_current_stock_data(stock_code, response):
     mc_component = stock_component.find('fin-streamer',
                                          attrs={'data-field': 'regularMarketChangePercent'})
 
-    s = StockCurrentModel(cp_component['value'], pc_component.span.text, mc_component.span.text)
+    s = StockCurrentModel(cp_component['value'], pc_component.span.text,
+                          mc_component.span.text[1:-1])
     return s

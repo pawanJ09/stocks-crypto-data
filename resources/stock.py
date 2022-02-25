@@ -1,14 +1,17 @@
 from flask import request, jsonify
 from app import app
-from model.stock import StockModel, StocksCodeModel
+from model.stock import StockModel, StocksCodeModel, StockCurrentModel
 from services.scrapedata import scrape_and_save, fetch_current_data
+from schemas.stock import StockCurrentSchema
 
 
 @app.route('/stocks/<name>', methods=['GET'])
 def fetch_current_stock_listing(name):
     stock_code = StocksCodeModel.find_by_name(name)
     if stock_code is not None:
-        fetch_current_data(stock_code)
+        sc = StockCurrentSchema()
+        scm = fetch_current_data(stock_code)
+        return sc.dump(scm)
     return jsonify({"message": f"Stock listings for {name} not found."}), 404
 
 
