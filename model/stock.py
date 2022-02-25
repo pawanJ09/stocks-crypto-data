@@ -98,3 +98,12 @@ class StockModel(Base):
             db_session.commit()
 
 
+class StockCurrentModel:
+
+    def __init__(self, current_value, price_change, market_change):
+        self.current_value = current_value
+        self.price_change = price_change
+        self.market_change = market_change
+
+    def __repr__(self):
+        return f'StockCurrentModel({self.current_value}, {self.price_change}, {self.market_change})'

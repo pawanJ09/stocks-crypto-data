@@ -1,10 +1,18 @@
 from flask import request, jsonify
 from app import app
 from model.stock import StockModel, StocksCodeModel
-from services.scrapedata import scrape_and_save
+from services.scrapedata import scrape_and_save, fetch_current_data
 
 
-@app.route('/stocks/<string:name>', methods=['GET'])
+@app.route('/stocks/<name>', methods=['GET'])
+def fetch_current_stock_listing(name):
+    stock_code = StocksCodeModel.find_by_name(name)
+    if stock_code is not None:
+        fetch_current_data(stock_code)
+    return jsonify({"message": f"Stock listings for {name} not found."}), 404
+
+
+@app.route('/stocks/historical/<string:name>', methods=['GET'])
 def fetch_stock_listings(name):
     date_from = request.args.get('date_from')
     date_to = request.args.get('date_to')
