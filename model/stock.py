@@ -1,23 +1,8 @@
-from sqlalchemy import Column, Integer, Date, Numeric, delete, select
-from sqlalchemy.exc import DataError, SQLAlchemyError, DBAPIError
-from sqlalchemy.sql.functions import max
-from database import Base, db_session
 from model.stockscode import StocksCodeModel
 from datetime import datetime
 
 
-class StockModel(Base):
-
-    __tablename__ = "stock"
-    id = Column(Integer, primary_key=True)
-    stock_id = Column(Integer)
-    stock_date = Column(Date)
-    open_val = Column(Numeric(precision=20, scale=6))
-    high_val = Column(Numeric(precision=20, scale=6))
-    low_val = Column(Numeric(precision=20, scale=6))
-    close_val = Column(Numeric(precision=20, scale=6))
-    adj_close_val = Column(Numeric(precision=20, scale=6))
-    volume = Column(Numeric(precision=20))
+class StockModel:
 
     def __init__(self, stock_code_id, *args):
         self.stock_id = stock_code_id
@@ -57,16 +42,7 @@ class StockModel(Base):
 
     @classmethod
     def fetch_listings_by_name_and_date(cls, name, *args):
-        stock_code = StocksCodeModel.find_by_name(name)
-        # This is ORM 2.0 style
-        if stock_code is not None:
-            if len(args) == 1:
-                stmt = select(cls).where(cls.stock_id == stock_code.id,
-                                         cls.stock_date >= args[0]).order_by(cls.stock_date)
-            else:
-                stmt = select(cls).where(cls.stock_id == stock_code.id, cls.stock_date >= args[0],
-                                         cls.stock_date <= args[1]).order_by(cls.stock_date)
-            return [row for row in db_session.execute(stmt)]
+        pass
 
     @classmethod
     def fetch_listing_max_date(cls, stock_code):
@@ -75,27 +51,14 @@ class StockModel(Base):
         :param stock_code: models.stockscode.StocksCodeModel object
         :return row: max date
         """
-        if stock_code is not None:
-            stmt = select(max(cls.stock_date)).where(cls.stock_id == stock_code.id)
-            print(type(stmt), stmt)
-            for row in db_session.execute(stmt):
-                return row[0]
+        pass
 
     def save_to_db(self):
-        try:
-            db_session.add(self)  # This is ORM 1.x style
-            db_session.commit()
-        except (SQLAlchemyError, DBAPIError) as error:
-            db_session.rollback()
-            raise DataError(statement=error.statement, params=error.params,
-                            orig=error.orig, code=error.code)
+        pass
 
     @classmethod
     def delete_from_db(cls, stock_code):
-        if stock_code is not None:
-            stmt = delete(cls).where(cls.stock_id == stock_code.id)  # This is ORM 2.0 style
-            db_session.execute(stmt)
-            db_session.commit()
+        pass
 
 
 class StockCurrentModel:

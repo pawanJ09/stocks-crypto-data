@@ -8,3 +8,10 @@ class StockCurrentSchema(Schema):
     price_change = fields.Str()
     market_change = fields.Str()
 
+
+class StocksCodeSchema(Schema):
+    class Meta:
+        unknown = INCLUDE
+    id = fields.Int()
+    stock_name = fields.Str()
+    stock_code = fields.Str()
