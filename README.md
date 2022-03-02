@@ -4,7 +4,7 @@
 
 This app fetches the current and historical data of 5 years for the requested Stock or Crypto. 
 The program has dependency on requests and BeautifulSoup module which invokes the Yahoo 
-Finance query engine, scrapes requested data and stores it in PostgreSQL. The APIs are created 
+Finance query engine, scrapes requested data and stores it in AWS DynamoDB. The APIs are created 
 and exposed using Flask, Flask-RESTful, Flask-SQLAlchemy and Marshmallow.
 
 ## Requirements
@@ -23,20 +23,6 @@ You can run the main.py program to get started. This file has the __main__ metho
 
 ```shell
 python main.py
-```
-
-## Build and Run using Docker
-
-### Build image
-
-```shell
-docker-compose build
-```
-
-### Run the container from built image
-
-```shell
-docker-compose up
 ```
 
 ## Usage
