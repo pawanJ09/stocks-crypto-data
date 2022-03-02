@@ -1,9 +1,6 @@
 from botocore.exceptions import ClientError
-from boto3 import client, resource
+from database import resource
 
-
-client = client('dynamodb')
-resource = resource('dynamodb')
 table = resource.Table('stocks-code-dd')
 
 

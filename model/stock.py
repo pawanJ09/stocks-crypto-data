@@ -1,13 +1,10 @@
 from model.stockscode import StocksCodeModel
 from botocore.exceptions import ClientError
-from boto3 import client, resource
 from boto3.dynamodb.conditions import Key
 from schemas.stock import StocksCodeSchema
 from decimal import Decimal
+from database import resource
 
-
-client = client('dynamodb')
-resource = resource('dynamodb')
 table = resource.Table('stocks-dd')
 
 scs = StocksCodeSchema()
