@@ -1,11 +1,9 @@
 from bs4 import BeautifulSoup
 from model.stock import StockModel, StockCurrentModel
-from sqlalchemy.exc import DataError
 from globals import url, headers, current_data_url
 from datetime import datetime
 import requests
 import time
-import csv
 
 
 def scrape_and_save(stock_code):
@@ -20,8 +18,9 @@ def date_criteria(stock_code):
     :param stock_code: model.stockscode.StocksCodeModel object
     :return: (period_start, period_end)
     """
-    max_date = StockModel.fetch_listing_max_date(stock_code)
-    if max_date is not None:
+    max_date_str = StockModel.fetch_listing_max_date(stock_code)
+    if max_date_str is not None:
+        max_date = datetime.strptime(max_date_str, '%Y-%m-%d').date()
         if datetime.now().date() == max_date:
             # if both are equal then no need to fetch latest data
             return 0, 0
@@ -31,7 +30,10 @@ def date_criteria(stock_code):
                                  + (24*60*60))
     else:
         period_start = round((time.time()) - (5 * 365.25) * 24 * 60 * 60)
-    period_end = round(time.time())
+    # Fetch until yesterday as today's date will be fetched by current stock service
+    period_end = round(time.time() - (24 * 60 * 60))
+    if period_start >= period_end:
+        return 0, 0
     return period_start, period_end
 
 
@@ -43,9 +45,9 @@ def scrape_data(stock_code, period_start, period_end):
     :param period_end: time in seconds
     :return: requests.models.Response object
     """
-    local_url = url.format(stock_code.code, period_start, period_end)
+    local_url = url.format(stock_code.stock_code, period_start, period_end)
     print(f'url {local_url}')
-    print(f'Fetching data for {stock_code.name}')
+    print(f'Fetching data for {stock_code.stock_name}')
     response = requests.get(url=local_url, headers=headers)
     return response
 
@@ -59,16 +61,15 @@ def generate_data(stock_code, response):
     :return:
     """
     if response.status_code == 200:
-        print(f'Parsing response for {stock_code.name}')
+        print(f'Parsing response for {stock_code.stock_name}')
         soup = BeautifulSoup(response.text, "html.parser")
         content_list = str(soup).split("\n")
-        stock_listings = [generate_stockmodel_object(stock_code.id, c) for i, c in enumerate(
+        stock_listings = [generate_stockmodel_object(stock_code.stock_id, c) for i, c in enumerate(
             content_list) if i > 0]
-        try:
-            for listing in stock_listings:
-                listing.save_to_db()
-        except DataError as error:
-            write_to_file(stock_code.code, stock_listings)
+        for listing in stock_listings:
+            listing.save_to_db()
+    else:
+        print(f'No response fetched for {stock_code.stock_name}')
 
 
 def generate_stockmodel_object(stock_code_id, content):
@@ -79,21 +80,6 @@ def generate_stockmodel_object(stock_code_id, content):
     :return: model.stock.StockModel object
     """
     return StockModel(stock_code_id, content.split(","))
-
-
-def write_to_file(entity_code, stock_listings):
-    """
-    This method writes the fetched contents to file in case there is an error writing to database
-    :param entity_code: str code
-    :param stock_listings: List of com.stock.StockModel objects
-    """
-    print(f'Writing data for {entity_code}')
-    with open(entity_code + '.csv', 'w') as csv_file:
-        header = 'stock_id,stock_date,open_val,high_val,low_val,close_val,adj_close_val,volume'
-        csv_writer = csv.writer(csv_file, delimiter='|')
-        csv_writer.writerow(header.split(','))
-        for listing in stock_listings:
-            csv_writer.writerow(listing.__str__().split(','))
 
 
 def fetch_current_data(stock_code):
@@ -114,9 +100,9 @@ def scrape_current_stock_data(stock_code):
     :param stock_code: model.stockscode.StocksCodeModel object
     :return: requests.models.Response object
     """
-    current_url = current_data_url.format(stock_code.code)
+    current_url = current_data_url.format(stock_code.stock_code)
     print(f'url {current_url}')
-    print(f'Fetching data for {stock_code.name}')
+    print(f'Fetching data for {stock_code.stock_name}')
     response = requests.get(url=current_url, headers=headers)
     return response
 
