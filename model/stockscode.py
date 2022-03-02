@@ -1,28 +1,25 @@
 from botocore.exceptions import ClientError
-from pprint import pprint
-import boto3
-import random
+from boto3 import client, resource
 
 
-client = boto3.client('dynamodb')
-resource = boto3.resource('dynamodb')
+client = client('dynamodb')
+resource = resource('dynamodb')
 table = resource.Table('stocks-code-dd')
 
 
 class StocksCodeModel:
 
-    table_name = 'stocks-code-dd'
-
-    def __init__(self, stock_id, name, code):
+    def __init__(self, stock_id, stock_name, stock_code):
         self.stock_id = stock_id
-        self.name = name
-        self.code = code
+        self.stock_name = stock_name
+        self.stock_code = stock_code
 
     def json(self):
-        return {"id": self.stock_id, "name": self.name, "code": self.code}
+        return {"id": self.stock_id, "name": self.stock_name, "code": self.stock_code}
 
     def __repr__(self):
-        return f"StocksCodeModel(id={self.stock_id!r}, name={self.name!r}, code={self.code!r})"
+        return f"StocksCodeModel(id={self.stock_id!r}, name={self.stock_name!r}, " \
+               f"code={self.stock_code!r})"
 
     @classmethod
     def find_by_name(cls, name):
@@ -32,7 +29,7 @@ class StocksCodeModel:
                     'stock_name': name
                 },
                 AttributesToGet=[
-                    'id', 'stock_name', 'stock_code'
+                    'stock_id', 'stock_name', 'stock_code'
                 ]
             )
             return stocks_code
@@ -43,9 +40,9 @@ class StocksCodeModel:
         try:
             response = table.put_item(
                 Item={
-                    'id': self.stock_id,
-                    'stock_name': self.name,
-                    'stock_code': self.code
+                    'stock_id': self.stock_id,
+                    'stock_name': self.stock_name,
+                    'stock_code': self.stock_code
                 }
             )
         except ClientError as e:
