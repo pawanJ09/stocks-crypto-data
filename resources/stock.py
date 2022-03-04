@@ -9,6 +9,11 @@ sc_many = StockSchema(many=True)
 stock_curr_schema = StockCurrentSchema()
 
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"message": "OK"}), 200
+
+
 @app.route('/stocks/<name>', methods=['GET'])
 def fetch_current_stock_listing(name):
     stock_code_response = StocksCodeModel.find_by_name(name)

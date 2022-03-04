@@ -3,7 +3,6 @@ from model.stock import StockModel, StockCurrentModel
 from globals import url, headers, current_data_url
 from datetime import datetime
 import requests
-import time
 
 
 def scrape_and_save(stock_code):
@@ -19,6 +18,7 @@ def date_criteria(stock_code):
     :return: (period_start, period_end)
     """
     max_date_str = StockModel.fetch_listing_max_date(stock_code)
+    curr_date = datetime.now().date()
     if max_date_str is not None:
         max_date = datetime.strptime(max_date_str, '%Y-%m-%d').date()
         if datetime.now().date() == max_date:
@@ -29,10 +29,12 @@ def date_criteria(stock_code):
             period_start = round(datetime(max_date.year, max_date.month, max_date.day).timestamp()
                                  + (24*60*60))
     else:
-        period_start = round((time.time()) - (5 * 365.25) * 24 * 60 * 60)
+        period_start = round(datetime(curr_date.year, curr_date.month, curr_date.day).timestamp()
+                             - ((5 * 365.25) * 24 * 60 * 60))
     # Fetch until yesterday as today's date will be fetched by current stock service
-    period_end = round(time.time() - (24 * 60 * 60))
-    if period_start >= period_end:
+    period_end = round(datetime(curr_date.year, curr_date.month, curr_date.day).timestamp()
+                       - (24 * 60 * 60))
+    if period_start > period_end:
         return 0, 0
     return period_start, period_end
 
