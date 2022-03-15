@@ -67,5 +67,4 @@ python main.py
 
 ### Connecting to AWS
 
-Use host as stocks-crypto-data-fgalb-1997690136.us-east-2.elb.amazonaws.com for the above 
-endpoints to access these services directly on AWS Cloud.
+Use host as ec2-3-16-128-116.us-east-2.compute.amazonaws.com:5001 for the above endpoints to access these services directly on AWS Cloud.
